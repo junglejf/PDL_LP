@@ -3,27 +3,10 @@ import System.IO
 import Utils
 import PDL
 
-estados = [1, 2, 3, 4, 5]
 
--- transicao :: Eq a => a -> [(a, a)]
--- transicao programa 
---     | programa == "alpha" = [(1, 1), (1, 2), (2, 3), (3, 4), (4, 4)]
---     | programa ==  "beta" = [(1, 2), (2, 1), (3, 3), (5, 5), (5, 4)]
---     | otherwise = error "trasição não definida"
 
 transicaoAlpha  = [(1, 1), (1, 2), (2, 3), (3, 4), (4, 4)]
 transicaoBeta = [(1, 2), (2, 1), (3, 3), (5, 5), (5, 4)]
--- transicoes vao ser uma funcao
-
--- verificacaoVariavel :: Eq -> [Eq]
--- verificacaoVariavel variavel 
---     | variavel == "p" = [1, 2, 3, 4]
---     | variavel == "q" = [1, 5]
---     | otherwise = error "variável não definida"
-
-validaP = [1, 2, 3, 4]
-validaQ = [1, 5]
-
 
 estadoAtual = [1]
 
@@ -54,8 +37,14 @@ w5 = checaVariavelValida validaP [1, 2, 3, 4] False
 
 
 
+estados = ['a', 'b', 'c']
+transicao :: Char -> [(Char, Char)]
+transicao aresta
+    | aresta == 'α' = [('a', 'a'), ('a', 'b')]
+    | aresta == 'β' = [('c', 'b'), ('b', 'c')]
+    | otherwise = error "transição inválida"
 
-
+programa = ["α;", "α U β", "β*"]
 
 
 

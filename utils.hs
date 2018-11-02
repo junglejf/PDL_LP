@@ -7,9 +7,8 @@ removeDuplicatas = foldl (\seen x -> if x `elem` seen
     then seen
     else seen ++ [x]) []
 
-concatenarDuasListasSemRepeticao :: [Int] -> [Int] -> [Int]
-concatenarDuasListasSemRepeticao lista1 lista2 = [x | x <- removeDuplicatas (lista1 ++ lista2) ]
-
+concatenarDuasListasSemRepeticao ::  (Eq a) => [a] -> [a] -> [a]
+concatenarDuasListasSemRepeticao lista1 lista2 =  removeDuplicatas (lista1 ++ lista2) 
 
 listasIguais :: (Eq a) => [a] -> [a] -> Bool
 listasIguais x y = null (x \\ y) && null (y \\ x)
