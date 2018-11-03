@@ -14,3 +14,11 @@ listasIguais :: (Eq a) => [a] -> [a] -> Bool
 listasIguais x y = null (x \\ y) && null (y \\ x)
 
 
+deletes :: Eq a => a -> [a] -> [a]
+deletes deleted xs = [ x | x <- xs, x /= deleted]
+
+
+arraySize :: Eq a => [a] -> Int
+arraySize (x:xs)
+    | xs == [] = 1
+    | otherwise = 1 + arraySize xs

@@ -14,12 +14,15 @@ estados = ['a', 'b', 'c']
 estadoAtual = head estados
 transicao :: Char -> [(Char, Char)]
 transicao aresta
-    | aresta == 'α' = [('a', 'a'), ('a', 'b')]
+    | aresta == 'α' = [('a', 'a'), ('a', 'b'), ('b', 'a')]
     | aresta == 'β' = [('c', 'b'), ('b', 'c')]
     | otherwise = error "transição inválida"
 
-programa = ["α;", "α U β", "β*"]
+programa = ["β*"]
 
+
+deletes :: Eq a => a -> [a] -> [a]
+deletes deleted xs = [ x | x <- xs, x /= deleted]
 
 containsEdge ::  String -> Char -> Bool
 containsEdge programa digito = digito `elem` programa
@@ -46,16 +49,10 @@ checarExecutaTransicao2 paramTransicao estadosAtuais
 executaLoop :: [String] -> [Char] -> Bool
 executaLoop [] estadoAtual = True
 executaLoop (x:xs) estadoAtual
+    | containsEdge x 'U' =  ((checarExecutaTransicao2 (head x)  estadoAtual) || (executaLoop [tail(tail(x ++ ";"))] estadoAtual)) && executaLoop xs (checarExecutaTransicao (head x)  estadoAtual)
     | containsEdge x ';' =  (checarExecutaTransicao2 (head x)  estadoAtual) && executaLoop xs (checarExecutaTransicao (head x)  estadoAtual) 
-    | containsEdge x 'U' =   False
     | containsEdge x '*' = False
     | otherwise = error "Programa inválido"
 
-
-
-
     -- splitOn "," "my,comma,separated,list"
     -- ["my","comma","separated","list"]
-
-
-

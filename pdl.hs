@@ -1,6 +1,7 @@
 module PDL where
 import Utils
 
+
 executaTransicao :: [Char] -> [(Char, Char)] -> [Char]
 executaTransicao estadosAtuais transicoes = [snd x | x <- transicoes, elem (fst x) estadosAtuais] ++ ['∅' | x <- estadosAtuais, not(elem x  (map fst transicoes))]
 
@@ -13,3 +14,11 @@ executaNTransicoes estadosAtuais transicoes
         transicaoExecutada = executaTransicao estadosAtuais transicoes
         listasConcatenadas = concatenarDuasListasSemRepeticao transicaoExecutada estadosAtuais
 
+
+executaNTransicoes2 :: [[Char]] -> [(Char, Char)] -> Int -> [[Char]]
+executaNTransicoes2 estadosAtuais transicoes i
+    | transicaoExecutada == ['∅'] = estadosAtuais
+    | i > arraySize transicoes = estadosAtuais
+    | otherwise = removeDuplicatas(executaNTransicoes2 (estadosAtuais ++ [(deletes '∅' transicaoExecutada)]) transicoes (i+1))
+    where 
+        transicaoExecutada =  removeDuplicatas(executaTransicao (last estadosAtuais) transicoes)
