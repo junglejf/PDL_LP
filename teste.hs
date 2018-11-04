@@ -5,20 +5,15 @@ import PDL
 import Debug.Trace
 
 
-
-foo a b c = trace ("input a: " ++ show a) (a + b + c)
-main = print (foo 1 2 3)
-
-
 estados = ['a', 'b', 'c']
 estadoAtual = head estados
 transicao :: Char -> [(Char, Char)]
 transicao aresta
-    | aresta == 'α' = [('a', 'a'), ('a', 'b'), ('b', 'a')]
-    | aresta == 'β' = [('c', 'b'), ('b', 'c')]
+    | aresta == 'α' = [('a', 'a'), ('a', 'b')]
+    | aresta == 'β' = [('a', 'b')]
     | otherwise = error "transição inválida"
 
-programa = ["β*"]
+programa = ["α*","β*"]
 
 
 deletes :: Eq a => a -> [a] -> [a]
@@ -49,9 +44,9 @@ checarExecutaTransicao2 paramTransicao estadosAtuais
 executaLoop :: [String] -> [Char] -> Bool
 executaLoop [] estadoAtual = True
 executaLoop (x:xs) estadoAtual
-    | containsEdge x 'U' =  ((checarExecutaTransicao2 (head x)  estadoAtual) || (executaLoop [tail(tail(x ++ ";"))] estadoAtual)) && executaLoop xs (checarExecutaTransicao (head x)  estadoAtual)
-    | containsEdge x ';' =  (checarExecutaTransicao2 (head x)  estadoAtual) && executaLoop xs (checarExecutaTransicao (head x)  estadoAtual) 
-    | containsEdge x '*' = False
+    | containsEdge x 'U' = ((checarExecutaTransicao2 (head x)  estadoAtual) || (executaLoop [tail(tail(x ++ ";"))] estadoAtual)) && executaLoop xs (checarExecutaTransicao (head x)  estadoAtual)
+    | containsEdge x ';' = if (checarExecutaTransicao2 (head x)  estadoAtual) == False then error "erro nos estados" else executaLoop xs (checarExecutaTransicao (head x)  estadoAtual) 
+    | containsEdge x '*' = any (\elemento -> executaLoop xs elemento)(executaNTransicoes2 [estadoAtual] (transicao(head x)) 1)
     | otherwise = error "Programa inválido"
 
     -- splitOn "," "my,comma,separated,list"
